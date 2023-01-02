@@ -1,10 +1,11 @@
 const User = require('../models/user');
 const NoExistError = require('../utils/NoExistError');
+const { defaultErrorStatus, dataErrorStatus, notFoundStatus } = require('../constants/errorStatuses');
 
 const findAllUsers = (req, res) => {
   User.find({})
     .then((data) => res.send(data))
-    .catch((err) => res.status(500).send({ message: `Что-то пошло не так: ${err.name}` })); // Обработка ошибки
+    .catch((err) => res.status(defaultErrorStatus).send({ message: `Что-то пошло не так: ${err.name}` })); // Обработка ошибки
 };
 
 const findUserById = (req, res) => {
@@ -18,15 +19,15 @@ const findUserById = (req, res) => {
     .catch((err) => {
       if (err instanceof NoExistError) {
         return res
-          .status(404)
+          .status(dataErrorStatus)
           .send({ message: 'Запрашиваемый пользователь не найден' });
       }
       if (err.name === 'CastError') {
         return res
-          .status(400)
+          .status(notFoundStatus)
           .send({ message: `Передан некорректный _id: ${req.params.userId}` });
       }
-      return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` }); // Обработка ошибки
+      return res.status(defaultErrorStatus).send({ message: `Что-то пошло не так: ${err.name}` }); // Обработка ошибки
     });
 };
 
@@ -38,12 +39,12 @@ const createUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res
-          .status(400)
+          .status(notFoundStatus)
           .send({
             message: 'Переданы некорректные данные при создании пользователя.',
           });
       }
-      return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
+      return res.status(defaultErrorStatus).send({ message: `Что-то пошло не так: ${err.name}` });
     }); // Обработка ошибки
 };
 
