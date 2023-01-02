@@ -33,9 +33,15 @@ router.delete('/:cardId', (req, res) => {
       return Promise.reject(new NoExistError());
     })
     .catch((err) => {
-      if (err.name === 'CastError' || err instanceof NoExistError) {
+      if (err instanceof NoExistError) {
         res.status(404).send({
           message: `Карточка с указанным _id: ${req.params.cardId} не найдена.`,
+        });
+        return;
+      }
+      if (err.name === 'CastError') {
+        res.status(400).send({
+          message: `Передан некорректный _id: ${req.params.cardId}.`,
         });
         return;
       }

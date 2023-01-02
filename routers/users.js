@@ -25,7 +25,7 @@ router.get('/:userId', (req, res) => {
       if (err.name === 'CastError') {
         return res
           .status(400)
-          .send({ message: `Передан некорректный id: ${req.params.userId}` });
+          .send({ message: `Передан некорректный _id: ${req.params.userId}` });
       }
       return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` }); // Обработка ошибки
     });
