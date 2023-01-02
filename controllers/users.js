@@ -19,12 +19,12 @@ const findUserById = (req, res) => {
     .catch((err) => {
       if (err instanceof NoExistError) {
         return res
-          .status(dataErrorStatus)
+          .status(notFoundStatus)
           .send({ message: 'Запрашиваемый пользователь не найден' });
       }
       if (err.name === 'CastError') {
         return res
-          .status(notFoundStatus)
+          .status(dataErrorStatus)
           .send({ message: `Передан некорректный _id: ${req.params.userId}` });
       }
       return res.status(defaultErrorStatus).send({ message: `Что-то пошло не так: ${err.name}` }); // Обработка ошибки
@@ -39,7 +39,7 @@ const createUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res
-          .status(notFoundStatus)
+          .status(dataErrorStatus)
           .send({
             message: 'Переданы некорректные данные при создании пользователя.',
           });
