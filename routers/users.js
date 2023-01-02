@@ -1,51 +1,10 @@
 const router = require('express').Router();
-const User = require('../models/user');
-const NoExistError = require('../utils/NoExistError');
+const { findAllUsers, findUserById, createUser } = require('../controllers/users');
 
-router.get('/', (req, res) => {
-  User.find({})
-    .then((data) => res.send(data))
-    .catch((err) => res.status(500).send({ message: `Что-то пошло не так: ${err.name}` })); // Обработка ошибки
-});
+router.get('/', findAllUsers);
 
-router.get('/:userId', (req, res) => {
-  User.findById(req.params.userId)
-    .then((user) => {
-      if (user) {
-        return res.send({ data: user });
-      }
-      return Promise.reject(new NoExistError());
-    })
-    .catch((err) => {
-      if (err instanceof NoExistError) {
-        return res
-          .status(404)
-          .send({ message: 'Запрашиваемый пользователь не найден' });
-      }
-      if (err.name === 'CastError') {
-        return res
-          .status(400)
-          .send({ message: `Передан некорректный _id: ${req.params.userId}` });
-      }
-      return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` }); // Обработка ошибки
-    });
-});
+router.get('/:userId', findUserById);
 
-router.post('/', (req, res) => {
-  const { name, about, avatar } = req.body;
-
-  User.create({ name, about, avatar })
-    .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res
-          .status(400)
-          .send({
-            message: 'Переданы некорректные данные при создании пользователя.',
-          });
-      }
-      return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
-    }); // Обработка ошибки
-});
+router.post('/', createUser);
 
 module.exports = router;

@@ -30,6 +30,7 @@ app.use('/users', routerUsers); // роутер юзеров
 app.use('/users/me', routerMe); // роутер данных юзера
 
 app.use('/cards', routerCards); // роутер карточек
+
 app.use('*', routerErrPath); // роутер для обработки неправильного пути
 
 app.listen(PORT, () => {

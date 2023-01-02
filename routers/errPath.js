@@ -1,7 +1,6 @@
 const router = require('express').Router();
+const errPath = require('../controllers/errPath');
 
-router.get('/', (req, res) => {
-  res.status(404).send({ message: 'Такой страницы не существует' });
-});
+router.patch('/', errPath);
 
 module.exports = router;
