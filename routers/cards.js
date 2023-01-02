@@ -5,7 +5,7 @@ const NoExistError = require('../utils/NoExistError');
 router.get('/', (req, res) => {
   Card.find({})
     .then((data) => res.send(data))
-    .catch((err) => res.status(500).send({ name: err.name, message: 'Что-то пошло не так!' })); // Обработка ошибки
+    .catch((err) => res.status(500).send({ message: `Что-то пошло не так: ${err.name}` })); // Обработка ошибки
 });
 
 router.post('/', (req, res) => {
@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
         });
         return;
       }
-      res.status(500).send({ name: err.name, message: 'Что-то пошло не так!' });
+      res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
     }); // Обработка ошибки
 });
 
@@ -39,7 +39,7 @@ router.delete('/:cardId', (req, res) => {
         });
         return;
       }
-      res.status(500).send({ name: err.name, message: 'Что-то пошло не так!' });
+      res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
     });
 });
 
@@ -62,7 +62,7 @@ router.put('/:cardId/likes', (req, res) => {
       if (err.name === 'CastError') {
         return res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка.' });
       }
-      return res.status(500).send({ name: err.name, message: 'Что-то пошло не так!' });
+      return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
     }); // Обработка ошибки;
 });
 
@@ -85,7 +85,7 @@ router.delete('/:cardId/likes', (req, res) => {
       if (err.name === 'CastError') {
         return res.status(400).send({ message: 'Переданы некорректные данные для удаления лайка.' });
       }
-      return res.status(500).send({ name: err.name, message: 'Что-то пошло не так!' });
+      return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
     }); // Обработка ошибки;
 });
 

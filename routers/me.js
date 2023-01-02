@@ -32,7 +32,7 @@ router.patch('/', (req, res) => {
           });
         return;
       }
-      res.status(500).send({ name: err.name, message: 'Что-то пошло не так' });
+      res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
     }); // Обработка ошибки
 });
 
@@ -68,7 +68,7 @@ router.patch('/avatar', (req, res) => {
           });
         return;
       }
-      res.status(500).send({ name: err.name, message: 'Что-то пошло не так' });
+      res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
     }); // Обработка ошибки
 });
 

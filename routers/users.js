@@ -5,7 +5,7 @@ const NoExistError = require('../utils/NoExistError');
 router.get('/', (req, res) => {
   User.find({})
     .then((data) => res.send(data))
-    .catch((err) => res.status(500).send({ name: err.name, message: 'Что-то пошло не так' })); // Обработка ошибки
+    .catch((err) => res.status(500).send({ message: `Что-то пошло не так: ${err.name}` })); // Обработка ошибки
 });
 
 router.get('/:userId', (req, res) => {
@@ -17,12 +17,17 @@ router.get('/:userId', (req, res) => {
       return Promise.reject(new NoExistError());
     })
     .catch((err) => {
-      if (err.name === 'CastError' || err instanceof NoExistError) {
+      if (err instanceof NoExistError) {
         return res
           .status(404)
           .send({ message: 'Запрашиваемый пользователь не найден' });
       }
-      return res.status(500).send({ name: err.name, message: 'Что-то пошло не так' }); // Обработка ошибки
+      if (err.name === 'CastError') {
+        return res
+          .status(400)
+          .send({ message: `Передан некорректный id: ${req.params.userId}` });
+      }
+      return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` }); // Обработка ошибки
     });
 });
 
@@ -39,7 +44,7 @@ router.post('/', (req, res) => {
             message: 'Переданы некорректные данные при создании пользователя.',
           });
       }
-      return res.status(500).send({ name: err.name, message: 'Что-то пошло не так' });
+      return res.status(500).send({ message: `Что-то пошло не так: ${err.name}` });
     }); // Обработка ошибки
 });
 
