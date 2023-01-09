@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const {
-  loginValidate, createUserValidate, changeUserDataValidate, createCardValidate, tokenValidate,
+  loginValidate, createUserValidate, changeUserDataValidate, tokenValidate,
 } = require('./middlewares/validate');
 const auth = require('./middlewares/auth');
 const routerUsers = require('./routers/users');
@@ -32,7 +32,7 @@ app.use('/users/me', tokenValidate, auth, changeUserDataValidate, routerMe); // 
 
 app.use('/users', tokenValidate, auth, routerUsers); // роутер юзеров
 
-app.use('/cards', tokenValidate, auth, createCardValidate, routerCards); // роутер карточек
+app.use('/cards', tokenValidate, auth, routerCards); // роутер карточек
 
 app.use('*', routerErrPath); // роутер для обработки неправильного пути
 

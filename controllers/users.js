@@ -33,9 +33,9 @@ const createUser = (req, res, next) => {
       avatar,
       email,
       password: hash,
-    }))
-    .then((user) => res.send({ data: user }))
-    .catch(next); // Обработка ошибки
+    })).then((user) => user.toObject())
+    .then((user) => res.send({ data: { ...user, password: undefined } }))
+    .catch(next);
 };
 
 const login = (req, res, next) => {
