@@ -12,7 +12,7 @@ module.exports.loginValidate = celebrate(
 module.exports.createUserValidate = celebrate(
   {
     body: Joi.object().keys({
-      email: Joi.string().required().min(2).max(30),
+      email: Joi.string().required().email(),
       password: Joi.string().required().min(2),
       // eslint-disable-next-line no-useless-escape
       avatar: Joi.string().min(5).pattern(/^https?:\/\/([\w\-]+\.)+[a-z]{2,}(\/[\w#\-\.~:\[\]@!\$&'\(\)\*\+,;=,]*)*$/i),

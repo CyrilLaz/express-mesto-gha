@@ -1,9 +1,7 @@
 /* eslint-disable no-unused-vars */
-const { isCelebrateError } = require('celebrate');
 const {
   defaultErrorStatus,
   dataErrorStatus,
-  notFoundStatus,
   unUniqueStatus,
 } = require('../constants/errorStatuses');
 
