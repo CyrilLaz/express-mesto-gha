@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const NoExistError = require('../errors/NoExistError');
 
 const cardSchema = new mongoose.Schema(
   {
@@ -25,5 +26,15 @@ const cardSchema = new mongoose.Schema(
   },
   { versionKey: false },
 );
+
+cardSchema.statics.isOwnerCheck = function (idCard, idUser) {
+  return this.findById(idCard).then((card) => {
+    if (!card) {
+      return Promise.reject(new NoExistError('Карточка не найдена'));
+    }
+
+    return String(card.owner) === idUser;
+  });
+};
 
 module.exports = mongoose.model('card', cardSchema);

@@ -1,17 +1,16 @@
 const Card = require('../models/card');
-const NoExistError = require('../utils/NoExistError');
+const NoExistError = require('../errors/NoExistError');
+const NoRightError = require('../errors/NoRightError');
 const {
   defaultErrorStatus,
   dataErrorStatus,
   notFoundStatus,
 } = require('../constants/errorStatuses');
 
-const findAllCards = (req, res) => {
+const findAllCards = (req, res, next) => {
   Card.find({})
     .then((data) => res.send(data))
-    .catch((err) => res
-      .status(defaultErrorStatus)
-      .send({ message: `Что-то пошло не так: ${err.name}` })); // Обработка ошибки
+    .catch(next); // Обработка ошибки
 };
 
 const createCard = (req, res) => {
@@ -32,31 +31,16 @@ const createCard = (req, res) => {
     }); // Обработка ошибки
 };
 
-const removeCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => {
-      if (card) {
-        return res.send({ message: 'Карточка удалена' });
+const removeCard = (req, res, next) => {
+  // console.log(typeof req.user._id,'###', type);
+  Card.isOwnerCheck(req.params.cardId, req.user._id)
+    .then((owned) => {
+      if (!owned) {
+        return Promise.reject(new NoRightError('Удалить карточку может только владелец'));
       }
-      return Promise.reject(new NoExistError());
-    })
-    .catch((err) => {
-      if (err instanceof NoExistError) {
-        res.status(notFoundStatus).send({
-          message: `Карточка с указанным _id: ${req.params.cardId} не найдена.`,
-        });
-        return;
-      }
-      if (err.name === 'CastError') {
-        res.status(dataErrorStatus).send({
-          message: `Передан некорректный _id: ${req.params.cardId}.`,
-        });
-        return;
-      }
-      res
-        .status(defaultErrorStatus)
-        .send({ message: `Что-то пошло не так: ${err.name}` });
-    });
+      return Card.findByIdAndRemove(req.params.cardId)
+        .then(() => res.send({ message: 'Карточка удалена' }));
+    }).catch(next);
 };
 
 const putLike = (req, res) => {
@@ -69,7 +53,7 @@ const putLike = (req, res) => {
       if (card) {
         return res.send(card);
       }
-      return Promise.reject(new NoExistError());
+      return Promise.reject(new NoExistError(`Передан несуществующий _id: ${req.params.cardId} карточки.`));
     })
     .catch((err) => {
       if (err instanceof NoExistError) {
