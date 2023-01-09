@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+const { isCelebrateError } = require('celebrate');
 const {
   defaultErrorStatus,
   dataErrorStatus,
@@ -8,10 +9,9 @@ const {
 
 const NoExistError = require('../errors/NoExistError');
 const NoRightError = require('../errors/NoRightError');
-const NoEnoughError = require('../errors/NoEnoughError');
 const UncorrectLoginError = require('../errors/UncorrectLoginError');
 
-module.exports.errors = (err, req, res, next) => {
+module.exports.handlerErrors = (err, req, res, next) => {
   const { statusCode = defaultErrorStatus, message } = err;
 
   if (err instanceof UncorrectLoginError) {
@@ -23,9 +23,7 @@ module.exports.errors = (err, req, res, next) => {
   if (err instanceof NoExistError) {
     return res.status(err.statusCode).send({ message });
   }
-  if (err instanceof NoEnoughError) {
-    return res.status(err.statusCode).send({ message });
-  }
+
   if (err.code === 11000) {
     return res
       .status(unUniqueStatus)

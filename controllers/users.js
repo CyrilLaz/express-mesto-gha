@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const NoExistError = require('../errors/NoExistError');
-const NoEnoughError = require('../errors/NoEnoughError');
 
 const findAllUsers = (req, res, next) => {
   User.find({})
@@ -25,9 +24,7 @@ const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  if (!email || !password) {
-    throw new NoEnoughError('Не хватает данных для идентификации');
-  }
+
   User.init()
     .then(() => bcrypt.hash(password, 10))
     .then((hash) => User.create({
@@ -43,9 +40,7 @@ const createUser = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    throw new NoEnoughError('Не хватает данных для аутентификации');
-  }
+
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(
