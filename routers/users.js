@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const { findAllUsers, findUserById, createUser } = require('../controllers/users');
+const { findAllUsers, findUserById } = require('../controllers/users');
+const {
+  idValidate,
+} = require('../middlewares/validate');
 
 router.get('/', findAllUsers);
-
-router.get('/:userId', findUserById);
-
-router.post('/', createUser);
+router.get('/:userId', idValidate, findUserById);
 
 module.exports = router;
