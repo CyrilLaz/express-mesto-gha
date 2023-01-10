@@ -1,26 +1,25 @@
 const jwt = require('jsonwebtoken');
 const { unAuthStatus } = require('../constants/errorStatuses');
-// const cookieParser
 
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок
-  const cookies = req.headers.cookie;
+  const { cookies } = req;
 
-  if (!cookies || !cookies.startsWith('jwt=')) {
+  if (!cookies || !cookies.jwt) {
     return res
       .status(unAuthStatus)
-      .send({ message: 'Необходима авторизация' });// обработка ошибки
+      .send({ message: 'Необходима авторизация' });
   }
 
-  const token = cookies.replace('jwt=', '');
+  const { jwt: token } = cookies;
   let payload;
 
   try {
-    payload = jwt.verify(token, 'some-secret-key');
+    payload = jwt.verify(token, 'some-secret-key'); // секретный код
   } catch (error) {
     return res
       .status(unAuthStatus)
-      .send({ message: 'Необходима авторизация' });// обработка ошибки
+      .send({ message: 'Необходима авторизация' });
   }
   req.user = payload;
 

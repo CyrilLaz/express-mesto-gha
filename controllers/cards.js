@@ -17,7 +17,6 @@ const createCard = (req, res, next) => {
 };
 
 const removeCard = (req, res, next) => {
-  // console.log(typeof req.user._id,'###', type);
   Card.isOwnerCheck(req.params.cardId, req.user._id)
     .then((owned) => {
       if (!owned) {
@@ -43,10 +42,10 @@ const putLike = (req, res, next) => {
     .catch(next); // Обработка ошибки;
 };
 
-const RemoveLike = (req, res, next) => {
+const removeLike = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+    { $pull: { likes: req.user._id } },
     { new: true },
   )
     .then((card) => {
@@ -63,5 +62,5 @@ module.exports = {
   createCard,
   removeCard,
   putLike,
-  RemoveLike,
+  removeLike,
 };
