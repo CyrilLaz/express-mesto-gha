@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { unAuthStatus } = require('../constants/errorStatuses');
+const jwtKey = require('../constants/jwtKey');
 
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок
@@ -15,7 +16,7 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, 'some-secret-key'); // секретный код
+    payload = jwt.verify(token, jwtKey); // секретный код
   } catch (error) {
     return res
       .status(unAuthStatus)

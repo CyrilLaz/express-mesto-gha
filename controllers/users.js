@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const NoExistError = require('../errors/NoExistError');
+const jwtKey = require('../constants/jwtKey');
 
 const findAllUsers = (req, res, next) => {
   User.find({})
@@ -45,7 +46,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        'some-secret-key', // секретный код
+        jwtKey, // секретный код
         { expiresIn: '7d' },
       );
       return res.cookie('jwt', token, {

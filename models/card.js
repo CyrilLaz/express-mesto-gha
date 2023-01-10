@@ -9,7 +9,17 @@ const cardSchema = new mongoose.Schema(
       minlength: 2,
       maxlength: 30,
     },
-    link: { type: String, required: true },
+    link: {
+      type: String,
+      required: true,
+      validate: {
+        validator(v) {
+          // eslint-disable-next-line no-useless-escape
+          const regex = /^https?:\/\/([\w\-]+\.)+[a-z]{2,}(\/[\w#\-\.~:\[\]@!\$&'\(\)\*\+,;=,]*)*$/i;
+          return regex.test(v);
+        },
+      },
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',

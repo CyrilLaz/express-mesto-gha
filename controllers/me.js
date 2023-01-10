@@ -25,28 +25,4 @@ const changeUserData = (req, res, next) => {
     .catch(next); // Обработка ошибки
 };
 
-const changeUserAvatar = (req, res, next) => {
-  const { avatar } = req.body;
-
-  User.findByIdAndUpdate(
-    req.user._id,
-    { avatar },
-    {
-      new: true,
-      runValidators: true,
-    },
-  )
-    .then((user) => {
-      if (user) {
-        return res.send({ data: user });
-      }
-      return Promise.reject(
-        new NoExistError(
-          `Пользователь с указанным _id: ${req.user._id} не найден.`,
-        ),
-      );
-    })
-    .catch(next); // Обработка ошибки
-};
-
-module.exports = { changeUserData, changeUserAvatar, getUserData };
+module.exports = { changeUserData, getUserData };

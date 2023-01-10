@@ -27,9 +27,16 @@ module.exports.changeUserDataValidate = celebrate(
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
+    }).or('name', 'about'),
+  },
+);
+
+module.exports.changeUserAvatarValidate = celebrate(
+  {
+    body: Joi.object().keys({
       // eslint-disable-next-line no-useless-escape
-      avatar: Joi.string().min(2).pattern(/^https?:\/\/([\w\-]+\.)+[a-z]{2,}(\/[\w#\-\.~:\[\]@!\$&'\(\)\*\+,;=,]*)*$/i),
-    }).or('name', 'about', 'avatar'),
+      avatar: Joi.string().required().min(2).pattern(/^https?:\/\/([\w\-]+\.)+[a-z]{2,}(\/[\w#\-\.~:\[\]@!\$&'\(\)\*\+,;=,]*)*$/i),
+    }),
   },
 );
 
