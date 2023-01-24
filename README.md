@@ -1,6 +1,29 @@
 [![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+# Бэкенд для приложения [Mesto](https://github.com/CyrilLaz/react-mesto-auth).
 
+Учимся теневой стороне веб-разработки.\
+Практикуем создание REST API с помощью библиотеки `express`.\
+Осваиваем работу с базой данных `MongoDB` с помощью библиотеки `Mongoose`.\
+Учимся отлавливать и обрабатывать ошибки.
+
+## Особенности:
+- приходящие на сервер запросы валидируются с помощью библиотеки `celebrate` в качестве мидлвэр и встроенной в него библиотеки `Joi`;
+- все роутеры кроме авторизации и регистрации защищены проверкой jwt токеном, который записан в httpOnly куке;
+- реализована централизованная обработка ошибок.
+
+## Роутеры
+- `POST /signin` - авторизация
+- `POST /signup` - регистрация
+****
+- `GET /cards` — возвращает все карточки
+- `POST /cards` — создаёт карточку
+- `PUT /cards/:cardId/likes` — поставить лайк карточке
+- `DELETE /cards/:cardId/likes` — убрать лайк с карточки
+- `DELETE /cards/:cardId` — удаляет карточку по идентификатору 
+****
+- `GET /users/me` - возвращает информацию о текущем пользователе
+- `PATCH /users/me` — обновляет профиль
+- `PATCH /users/me/avatar` — обновляет аватар
 
 ## Директории
 
