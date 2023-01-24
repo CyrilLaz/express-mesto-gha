@@ -39,5 +39,5 @@ module.exports.handlerErrors = (err, req, res, next) => {
   }
   return res
     .status(statusCode)
-    .send({ message: `Что-то пошло не так: ${err.name}` });
+    .send({ message: 'На сервере произошла ошибка' });
 };
