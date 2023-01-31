@@ -4,8 +4,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const {
-  loginValidate, createUserValidate, tokenValidate,
+  loginValidate,
+  createUserValidate,
+  tokenValidate,
 } = require('./middlewares/validate');
 const auth = require('./middlewares/auth');
 const routerUsers = require('./routers/users');
@@ -24,7 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(PATH_MONGO);
-
+app.use(requestLogger);
 app.post('/signin', loginValidate, login);
 app.post('/signup', createUserValidate, createUser);
 
@@ -36,6 +39,7 @@ app.use('/cards', tokenValidate, auth, routerCards); // роутер карто�
 
 app.use('*', routerErrPath); // роутер для обработки неправильного пути
 
+app.use(errorLogger);
 app.use(errors());
 app.use(handlerErrors);
 
