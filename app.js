@@ -28,6 +28,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(PATH_MONGO);
 app.use(requestLogger);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+}); // тестирование ситуации падения сервера
+
 app.post('/signin', loginValidate, login);
 app.post('/signup', createUserValidate, createUser);
 
