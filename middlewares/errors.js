@@ -8,10 +8,14 @@ const {
 const NoExistError = require('../errors/NoExistError');
 const NoRightError = require('../errors/NoRightError');
 const UncorrectLoginError = require('../errors/UncorrectLoginError');
+const UnAuthError = require('../errors/UnAuthError');
 
 module.exports.handlerErrors = (err, req, res, next) => {
   const { statusCode = defaultErrorStatus, message } = err;
 
+  if (err instanceof UnAuthError) {
+    return res.status(err.statusCode).send({ message });
+  }
   if (err instanceof UncorrectLoginError) {
     return res.status(err.statusCode).send({ message });
   }
