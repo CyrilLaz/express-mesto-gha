@@ -22,19 +22,19 @@ const findUserById = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
   User.init()
     .then(() => bcrypt.hash(password, 10))
-    .then((hash) =>
-      User.create({
-        name,
-        about,
-        avatar,
-        email,
-        password: hash,
-      })
-    )
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    }))
     .then((user) => user.toObject())
     .then((user) => res.send({ data: { ...user, password: undefined } }))
     .catch(next);
@@ -48,7 +48,7 @@ const login = (req, res, next) => {
       const token = jwt.sign(
         { _id: user._id },
         jwtKey, // секретный код
-        { expiresIn: '7d' }
+        { expiresIn: '7d' },
       );
 
       return res
@@ -62,9 +62,8 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
-const logout = (req, res, next) => {
+const logout = (req, res) => {
   const { jwt: token } = req.cookies;
-  // Promise.reject(
   res
     .cookie('jwt', token, {
       maxAge: 0,

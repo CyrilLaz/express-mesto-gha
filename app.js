@@ -19,8 +19,7 @@ const { handlerErrors } = require('./middlewares/errors');
 const { createUser, login, logout } = require('./controllers/users');
 const cors = require('./middlewares/cors');
 
-const { PORT = 3000, PATH_MONGO = 'mongodb://localhost:27017/mestodb' } =
-  process.env;
+const { PORT = 3000, PATH_MONGO = 'mongodb://localhost:27017/mestodb' } = process.env;
 
 const app = express();
 app.use(cors);

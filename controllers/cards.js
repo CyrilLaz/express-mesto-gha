@@ -4,7 +4,7 @@ const NoRightError = require('../errors/NoRightError');
 
 const findAllCards = (req, res, next) => {
   Card.find({})
-    .then((data) => res.send({data}))
+    .then((data) => res.send({ data }))
     .catch(next);
 };
 
