@@ -17,18 +17,19 @@ const routerMe = require('./routers/me');
 const routerErrPath = require('./routers/errPath');
 const { handlerErrors } = require('./middlewares/errors');
 const { createUser, login } = require('./controllers/users');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000, PATH_MONGO = 'mongodb://localhost:27017/mestodb' } = process.env;
 
 const app = express();
-
+app.use(cors);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(PATH_MONGO);
-app.use(requestLogger);
 
+app.use(requestLogger);
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
