@@ -4,7 +4,7 @@ const NoRightError = require('../errors/NoRightError');
 
 const findAllCards = (req, res, next) => {
   Card.find({})
-    .then((data) => res.send(data))
+    .then((data) => res.send({data}))
     .catch(next);
 };
 
@@ -35,7 +35,7 @@ const putLike = (req, res, next) => {
   )
     .then((card) => {
       if (card) {
-        return res.send(card);
+        return res.send({ data: card });
       }
       return Promise.reject(new NoExistError(`Передан несуществующий _id: ${req.params.cardId} карточки.`));
     })
@@ -50,7 +50,7 @@ const removeLike = (req, res, next) => {
   )
     .then((card) => {
       if (card) {
-        return res.send(card);
+        return res.send({ data: card });
       }
       return Promise.reject(new NoExistError(`Передан несуществующий _id: ${req.params.cardId} карточки.`));
     })

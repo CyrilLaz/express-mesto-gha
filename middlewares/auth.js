@@ -1,14 +1,12 @@
 const e = require('express');
 const jwt = require('jsonwebtoken');
-// const { unAuthStatus } = require('../constants/errorStatuses');
 const jwtKey = require('../constants/jwtKey');
 const UnAuthError = require('../errors/UnAuthError');
 
-module.exports = (req, res, next) => {
-  // достаём авторизационный заголовок
+module.exports = async (req, res, next) => {
   const { cookies } = req;
-  let payload;
 
+  let payload;
   try {
     if (!cookies || !cookies.jwt) throw e;
 
