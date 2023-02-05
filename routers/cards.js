@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {
-  findAllCards,
+  findEighteenLastCards,
+  // findAllCards,
   createCard,
   removeCard,
   putLike,
@@ -8,7 +9,7 @@ const {
 } = require('../controllers/cards');
 const { idValidate, createCardValidate } = require('../middlewares/validate');
 
-router.get('/', findAllCards);
+router.get('/', findEighteenLastCards);
 
 router.post('/', createCardValidate, createCard);
 
