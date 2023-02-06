@@ -29,12 +29,10 @@ const removeCard = (req, res, next) => {
     .then((owned) => {
       if (!owned) {
         return Promise.reject(
-          new NoRightError('Удалить карточку может только владелец')
+          new NoRightError('Удалить карточку может только владелец'),
         );
       }
-      return Card.findByIdAndRemove(req.params.cardId).then(() =>
-        res.send({ message: 'Карточка удалена' })
-      );
+      return Card.findByIdAndRemove(req.params.cardId).then(() => res.send({ message: 'Карточка удалена' }));
     })
     .catch(next);
 };
@@ -43,7 +41,7 @@ const putLike = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (card) {
@@ -51,8 +49,8 @@ const putLike = (req, res, next) => {
       }
       return Promise.reject(
         new NoExistError(
-          `Передан несуществующий _id: ${req.params.cardId} карточки.`
-        )
+          `Передан несуществующий _id: ${req.params.cardId} карточки.`,
+        ),
       );
     })
     .catch(next); // Обработка ошибки;
@@ -62,7 +60,7 @@ const removeLike = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (card) {
@@ -70,8 +68,8 @@ const removeLike = (req, res, next) => {
       }
       return Promise.reject(
         new NoExistError(
-          `Передан несуществующий _id: ${req.params.cardId} карточки.`
-        )
+          `Передан несуществующий _id: ${req.params.cardId} карточки.`,
+        ),
       );
     })
     .catch(next); // Обработка ошибки;
