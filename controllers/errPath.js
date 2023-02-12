@@ -1,5 +1,5 @@
-const { notFoundStatus } = require('../constants/errorStatuses');
+const NoExistError = require('../errors/NoExistError');
 
-module.exports = (req, res) => {
-  res.status(notFoundStatus).send({ message: `Такого пути: ${req.baseUrl} не существует` });
+module.exports = (req, res, next) => {
+  next(new NoExistError(`Такого пути: ${req.baseUrl} не существует`));
 };
